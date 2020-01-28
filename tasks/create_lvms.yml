@@ -1,0 +1,41 @@
+---
+- name: yum | Install lvm related tools
+  yum:
+    name: lvm2
+    state: present
+
+- name: lvg | Set up logical volume groups and req pvs
+  lvg:
+    vg: "{{ volume_group_name }}"
+    pvs: "{{ pvs }}"
+
+- name: lvol | Set up logical volume
+  lvol:
+    vg: "{{ volume_group_name }}"
+    lv: "{{ item.name }}"
+    size: "{{ item.size }}"
+  loop: "{{ lvs }}"
+
+- name: filesystem | Format fs
+  filesystem:
+    fstype: "{{ item.fstype }}"
+    device: "/dev/mapper/{{ volume_group_name }}-{{ item.lv }}"
+  loop: "{{ mount_points }}"
+
+- name: file | Create required directory structure
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0750
+    recurse: true
+  loop: "{{ mount_points }}"
+
+- name: mount | Mount filesystem(s)
+  mount:
+    path: "{{ item.path }}"
+    src: "/dev/mapper/{{ volume_group_name }}-{{ item.lv }}"
+    fstype: "{{ item.fstype }}"
+    state: mounted
+  loop: "{{ mount_points }}"

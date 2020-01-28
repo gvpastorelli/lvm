@@ -1,0 +1,11 @@
+# wireframe for lvm
+---
+- name: lvm setup
+  hosts: all
+  tasks:
+    - name: install lvm2 package
+      yum:
+        name: lvm2
+        state: latest
+
+

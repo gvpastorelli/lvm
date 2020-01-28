@@ -1,0 +1,16 @@
+---
+- hosts: all 
+  remote_user: root
+  vars:
+    volume_group_name: vg_test
+    pvs:
+      - /dev/sdb
+    lvs:
+      - name: test_lv
+        size: 2g
+    mount_points:
+      - path: /testing
+        fstype: xfs
+        lv: test_lv
+  roles:
+    - lvms

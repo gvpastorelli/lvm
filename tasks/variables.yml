@@ -1,0 +1,21 @@
+- name: assert | Validate volume_group_name
+  assert:
+    quiet: true
+    that: 
+      - volume_group_name is defined
+
+- name: assert | Validate lvs
+  assert:
+    quiet: true
+    that: 
+      - lvs is defined
+
+- name: assert | Validate pvs
+  assert:
+    that:
+      - pvs is defined
+
+- name: assert | mount_points is defined
+  assert:
+    that:
+      - mount_points is defined

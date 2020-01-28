@@ -1,0 +1,4 @@
+---
+# tasks file for lvms
+- include_tasks: variables.yml
+- include_tasks: create_lvms.yml
