@@ -10,11 +10,12 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "2048"
 
-	file_to_disk = 'tmp_disk.vdi'
+	file_to_disk = 'tmp_disk.vd'
 	unless File.exists?(file_to_disk)
-	  # 10GB
-      vb.customize ['createhd', '--filename', file_to_disk, '--size', 10 * 1024]
-      vb.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', file_to_disk]
+      vb.customize ["storagectl", :id, "--name", "SATA Controller", "--add", "sata", "--portcount", 4, "--controller", "IntelAHCI"]
+      vb.customize ["createhd", "--filename", file_to_disk, "--size", 10 * 1024, "--format", "VDI"]
+      #vb.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', file_to_disk]
+      vb.customize ["storageattach", :id, "--storagectl", "SATA Controller", "--port", 0, "--type", "hdd", "--medium", file_to_disk]
     end
 
   end
